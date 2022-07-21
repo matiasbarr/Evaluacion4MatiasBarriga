@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="EvacuatroModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Lectura">
+          <Key>
+            <PropertyRef Name="IdLectura" />
+          </Key>
+          <Property Name="IdLectura" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdMedidor" Type="int" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="Consumo" Type="varchar" MaxLength="50" />
+          <Property Name="FechaLectura" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Medidor">
+          <Key>
+            <PropertyRef Name="IdMedidor" />
+          </Key>
+          <Property Name="IdMedidor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NumeroMedidor" Type="int" />
+          <Property Name="TipoMedidor" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" />
+          <Property Name="Rut" Type="varchar" MaxLength="50" />
+          <Property Name="Contraseña" Type="varchar" MaxLength="50" />
+          <Property Name="Correo" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <Association Name="FK_Lectura_Medidor">
+          <End Role="Medidor" Type="Self.Medidor" Multiplicity="1" />
+          <End Role="Lectura" Type="Self.Lectura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medidor">
+              <PropertyRef Name="IdMedidor" />
+            </Principal>
+            <Dependent Role="Lectura">
+              <PropertyRef Name="IdMedidor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Lectura_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Lectura" Type="Self.Lectura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Lectura">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EvacuatroModelStoreContainer">
+          <EntitySet Name="Lectura" EntityType="Self.Lectura" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Medidor" EntityType="Self.Medidor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Lectura_Medidor" Association="Self.FK_Lectura_Medidor">
+            <End Role="Medidor" EntitySet="Medidor" />
+            <End Role="Lectura" EntitySet="Lectura" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Lectura_Usuario" Association="Self.FK_Lectura_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Lectura" EntitySet="Lectura" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="EvacuatroModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Lectura">
+          <Key>
+            <PropertyRef Name="IdLectura" />
+          </Key>
+          <Property Name="IdLectura" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdMedidor" Type="Int32" Nullable="false" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="Consumo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FechaLectura" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Medidor" Relationship="Self.FK_Lectura_Medidor" FromRole="Lectura" ToRole="Medidor" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Lectura_Usuario" FromRole="Lectura" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Medidor">
+          <Key>
+            <PropertyRef Name="IdMedidor" />
+          </Key>
+          <Property Name="IdMedidor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NumeroMedidor" Type="Int32" />
+          <Property Name="TipoMedidor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Lecturas" Relationship="Self.FK_Lectura_Medidor" FromRole="Medidor" ToRole="Lectura" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Rut" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Contraseña" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Correo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Lecturas" Relationship="Self.FK_Lectura_Usuario" FromRole="Usuario" ToRole="Lectura" />
+        </EntityType>
+        <Association Name="FK_Lectura_Medidor">
+          <End Role="Medidor" Type="Self.Medidor" Multiplicity="1" />
+          <End Role="Lectura" Type="Self.Lectura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medidor">
+              <PropertyRef Name="IdMedidor" />
+            </Principal>
+            <Dependent Role="Lectura">
+              <PropertyRef Name="IdMedidor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Lectura_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Lectura" Type="Self.Lectura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Lectura">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EvacuatroEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Lecturas" EntityType="Self.Lectura" />
+          <EntitySet Name="Medidors" EntityType="Self.Medidor" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuario" />
+          <AssociationSet Name="FK_Lectura_Medidor" Association="Self.FK_Lectura_Medidor">
+            <End Role="Medidor" EntitySet="Medidors" />
+            <End Role="Lectura" EntitySet="Lecturas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Lectura_Usuario" Association="Self.FK_Lectura_Usuario">
+            <End Role="Usuario" EntitySet="Usuarios" />
+            <End Role="Lectura" EntitySet="Lecturas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="EvacuatroModelStoreContainer" CdmEntityContainer="EvacuatroEntities">
+          <EntitySetMapping Name="Lecturas">
+            <EntityTypeMapping TypeName="EvacuatroModel.Lectura">
+              <MappingFragment StoreEntitySet="Lectura">
+                <ScalarProperty Name="IdLectura" ColumnName="IdLectura" />
+                <ScalarProperty Name="IdMedidor" ColumnName="IdMedidor" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Consumo" ColumnName="Consumo" />
+                <ScalarProperty Name="FechaLectura" ColumnName="FechaLectura" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Medidors">
+            <EntityTypeMapping TypeName="EvacuatroModel.Medidor">
+              <MappingFragment StoreEntitySet="Medidor">
+                <ScalarProperty Name="IdMedidor" ColumnName="IdMedidor" />
+                <ScalarProperty Name="NumeroMedidor" ColumnName="NumeroMedidor" />
+                <ScalarProperty Name="TipoMedidor" ColumnName="TipoMedidor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="EvacuatroModel.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Rut" ColumnName="Rut" />
+                <ScalarProperty Name="Contraseña" ColumnName="Contraseña" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
